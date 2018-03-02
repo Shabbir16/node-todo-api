@@ -6,6 +6,8 @@ var {mongoose} = require('./db/mongoose.js');
 var {Todo} = require('./models/Todo.js');
 var {Users} = require('./models/Users');
 
+var port  = process.env.port || 3000;
+
 var app = express();
 
 app.use(bodyParser.json());
@@ -60,6 +62,6 @@ app.get('/todos/:id',(req,res)=>{
     }).catch((e)=> res.send(400).send());
 })
 
-app.listen(3000); 
+app.listen(port); 
 
 module.exports = {app};
