@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const ObjectID = require('mongodb');
 
 var {mongoose} = require('./db/mongoose.js');
 var {Todo} = require('./models/Todo.js');
@@ -45,6 +46,18 @@ app.get('/todos',(req,res)=>{
     },(e)=>{
         res.status(400).send(e);
     });
+});
+
+app.get('/todos/:id',(req,res)=>{
+    var id = req.params.id;
+    var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
+    if(!checkForHexRegExp.test(id))
+       return res.status(404).send();
+    Todo.findById(id).then((docs)=>{
+        if(!docs)
+            return res.status(400).send({})
+        res.send(docs);
+    }).catch((e)=> res.send(400).send());
 })
 
 app.listen(3000); 
